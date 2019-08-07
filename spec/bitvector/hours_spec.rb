@@ -73,29 +73,29 @@ RSpec.describe BitVector::Hours do
       end
     end
 
-    context "can be extended" do
-      let(:extended_range) { [1...2, 140...148, 286...287] }
-      let(:extended_vector) { "40000000-00000000-00000000-00000000-000ff000-00000000-00000000-00000000-00000002" }
+    context "can be expanded" do
+      let(:expanded_range) { [1...2, 140...148, 286...287] }
+      let(:expanded_vector) { "40000000-00000000-00000000-00000000-000ff000-00000000-00000000-00000000-00000002" }
 
       it "with ranges" do
-        subject.extend 140...148
+        subject.expand 140...148
 
-        expect(subject.ranges).to eq(extended_range)
-        expect(subject.to_s).to eq(extended_vector)
+        expect(subject.ranges).to eq(expanded_range)
+        expect(subject.to_s).to eq(expanded_vector)
       end
 
       it "with bit array" do
-        subject.extend [140, 148]
+        subject.expand [140, 148]
 
-        expect(subject.ranges).to eq(extended_range)
-        expect(subject.to_s).to eq(extended_vector)
+        expect(subject.ranges).to eq(expanded_range)
+        expect(subject.to_s).to eq(expanded_vector)
       end
 
       it "with hours array" do
-        subject.extend ["11:40", "12:20"]
+        subject.expand ["11:40", "12:20"]
 
-        expect(subject.ranges).to eq(extended_range)
-        expect(subject.to_s).to eq(extended_vector)
+        expect(subject.ranges).to eq(expanded_range)
+        expect(subject.to_s).to eq(expanded_vector)
       end
     end
 
@@ -104,7 +104,7 @@ RSpec.describe BitVector::Hours do
       let(:cleared_vector) { "40000000-00000000-00000000-00000000-000c3000-00000000-00000000-00000000-00000002" }
 
       it "with ranges" do
-        subject.extend 140...148
+        subject.expand 140...148
         subject.clear 142...146
 
         expect(subject.ranges).to eq(cleared_range)
@@ -112,7 +112,7 @@ RSpec.describe BitVector::Hours do
       end
 
       it "with bit array" do
-        subject.extend 140...148
+        subject.expand 140...148
         subject.clear [142, 146]
 
         expect(subject.ranges).to eq(cleared_range)
@@ -120,7 +120,7 @@ RSpec.describe BitVector::Hours do
       end
 
       it "with hours array" do
-        subject.extend ["11:40", "12:20"]
+        subject.expand ["11:40", "12:20"]
         subject.clear ["11:50", "12:10"]
 
         expect(subject.ranges).to eq(cleared_range)
@@ -134,7 +134,7 @@ RSpec.describe BitVector::Hours do
 
       Time.use_zone('America/New_York') do
         it "can be set" do
-          subject.extend ["4:55", "5:05"]
+          subject.expand ["4:55", "5:05"]
 
           travel 5.hours
           expect(subject.current_bit).to eq(60)

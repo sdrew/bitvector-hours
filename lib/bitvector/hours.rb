@@ -57,7 +57,7 @@ module BitVector
       Time.use_zone(self.timezone) { Time.current }
     end
 
-    def extend(range)
+    def expand(range)
       range = array_to_range(range) if range.is_a?(Array)
       range.to_a.each { |bit| vector[bit] = 1 }
     end
