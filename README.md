@@ -1,8 +1,5 @@
 # BitVector::Hours
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/bitvector/hours`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
 
 ## Installation
 
@@ -22,7 +19,77 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+# Empty vector with default resolution of 5mins
+bv = BitVector::Hours.new
+bv.resolution
+#> 5
+bv.size
+#> 288
+
+bv.expand 10..20
+#> [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+
+bv.ranges
+#> [10...21]
+
+bv.hours
+#> [["00:50", "01:45"]]
+
+bv.expand 40...60
+bv.ranges
+#> [10...21, 40...60]
+bv.hours
+#> [["00:50", "01:45"], ["03:20", "05:00"]]
+
+bv.clear 50...60
+bv.ranges
+#> [0...1, 10...21, 40...50]
+bv.hours
+#> [["00:50", "01:45"], ["03:20", "04:10"]]
+
+bv.vector[0] = 1
+bv.ranges
+#> [0...1, 10...21, 40...50]
+bv.hours
+#> [["00:00", "00:05"], ["00:50", "01:45"], ["03:20", "04:10"]]
+
+bv.active?
+
+bv.active? bit: 10
+#> true
+bv.active? bit: 100
+#> false
+
+bv.active? hour: "04:00"
+#> true
+bv.active? hour: "23:15"
+#> false
+
+bv.to_s
+#> "00000000-00000000-00000000-00000000-00000000-00000000-00000000-0003ff00-001ffc01"
+```
+
+### Timezones
+
+```ruby
+bv.expand ["20:30", "21:00"]
+
+bv.current_hour
+#> "22:50"
+bv.current_bit
+#> 274
+bv.active?
+#> false
+
+bv.timezone = 'America/Los_Angeles'
+bv.current_hour
+#> "20:50"
+bv.current_bit
+#> 250
+bv.active?
+#> true
+```
 
 ## Development
 
