@@ -36,7 +36,6 @@ module BitVector
       bit = bit_from_hour(hour) if hour.present?
       bit = self.current_bit if bit.nil?
 
-      # self.ranges.map(&:to_a).flatten.member? at
       vector[bit] == 1
     end
 
