@@ -137,13 +137,13 @@ RSpec.describe BitVector::Hours do
           subject.expand ["4:55", "5:05"]
 
           travel 5.hours
-          expect(subject.current_bit).to eq(60)
           expect(subject.current_hour).to eq("05:00")
+          expect(subject.current_bit).to eq(60)
           expect(subject.active?).to be true
 
           subject.timezone = 'America/Los_Angeles'
-          expect(subject.current_bit).to eq(36)
           expect(subject.current_hour).to eq("03:00")
+          expect(subject.current_bit).to eq(36)
           expect(subject.active?).to be false
         end
       end
