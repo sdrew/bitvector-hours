@@ -12,7 +12,7 @@ module BitVector
 
     MINUTES_MAX = 60 * 24
 
-    attr_accessor :timezone
+    attr_writer :timezone
     attr_reader :vector
 
     delegate :size, to: :vector
@@ -20,8 +20,6 @@ module BitVector
     def initialize(encoded = '', resolution: 5)
       size = (MINUTES_MAX / resolution.to_f).round
       value = 0
-
-      @timezone = Time.zone
 
       unless encoded.empty?
         encoded = ::BitVector::Hours.decode(encoded)
@@ -76,6 +74,10 @@ module BitVector
 
     def resolution
       MINUTES_MAX / size
+    end
+
+    def timezone
+      @timezone || Time.zone
     end
 
     def to_s

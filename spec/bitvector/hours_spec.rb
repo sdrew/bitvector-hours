@@ -129,24 +129,43 @@ RSpec.describe BitVector::Hours do
     end
 
     context "timezones" do
-      before { travel_to Time.local(2010, 6, 15) }
-      after  { travel_back }
+      around(:each) do |example|
+        Time.use_zone('UTC') do
+          travel_to Time.utc(2010, 6, 15) do
+            example.run
+          end
+        end
+      end
 
-      Time.use_zone('America/New_York') do
-        it "can be set" do
-          subject.expand ["4:55", "5:05"]
+      it "can be set" do
+        subject.expand ["4:55", "5:05"]
 
-          travel 5.hours
-          expect(subject.current_time.hour).to eq(5)
+        expect(subject.current_time.hour).to eq(0) # UTC
+
+        Time.use_zone('America/New_York') do
+          expect(subject.current_time.hour).to eq(20) # A/N_Y
+          expect(subject.current_hour).to eq("20:00")
+          expect(subject.current_bit).to eq(240)
+          expect(subject.active?).to be false
+
+          subject.timezone = 'America/Los_Angeles'
+          expect(subject.current_time.hour).to eq(17) # A/L_A
+          expect(subject.current_hour).to eq("17:00")
+          expect(subject.current_bit).to eq(204)
+          expect(subject.active?).to be false
+
+          travel 9.hours
+
+          expect(subject.current_time.hour).to eq(2) # A/L_A
+          expect(subject.current_hour).to eq("02:00")
+          expect(subject.current_bit).to eq(24)
+          expect(subject.active?).to be false
+
+          subject.timezone = nil
+          expect(subject.current_time.hour).to eq(5) # A/N_Y
           expect(subject.current_hour).to eq("05:00")
           expect(subject.current_bit).to eq(60)
           expect(subject.active?).to be true
-
-          subject.timezone = 'America/Los_Angeles'
-          expect(subject.current_time.hour).to eq(3)
-          expect(subject.current_hour).to eq("03:00")
-          expect(subject.current_bit).to eq(36)
-          expect(subject.active?).to be false
         end
       end
     end
