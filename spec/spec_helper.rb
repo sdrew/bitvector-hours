@@ -1,7 +1,21 @@
 require "bundler/setup"
-require "bitvector/hours"
-
 require "active_support/testing/time_helpers"
+
+if ENV['CODECOV_TOKEN'].present?
+  require 'simplecov'
+  require 'codecov'
+
+  SimpleCov.formatter = SimpleCov::Formatter::Codecov
+  SimpleCov.profiles.define 'gem' do
+    add_filter '/spec/'
+
+    add_group 'Source', 'lib'
+  end
+
+  SimpleCov.start 'gem'
+end
+
+require "bitvector/hours"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

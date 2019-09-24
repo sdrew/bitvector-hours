@@ -1,6 +1,6 @@
 # BitVector::Hours
 
-[![Actions Status](https://github.com/sdrew/bitvector-hours/workflows/Ruby/badge.svg)](https://github.com/sdrew/bitvector-hours)
+[![Actions Status](https://github.com/sdrew/bitvector-hours/workflows/Ruby/badge.svg)](https://github.com/sdrew/bitvector-hours) [![codecov](https://codecov.io/gh/sdrew/bitvector-hours/branch/master/graph/badge.svg)](https://codecov.io/gh/sdrew/bitvector-hours)
 
 ## Installation
 

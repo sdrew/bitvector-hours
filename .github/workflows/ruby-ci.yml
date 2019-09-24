@@ -16,6 +16,8 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
     - name: Build and test with Rake
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       run: |
         gem install bundler --no-document
         bundle install --jobs 4 --retry 3
