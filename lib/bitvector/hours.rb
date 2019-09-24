@@ -101,14 +101,16 @@ module BitVector
     private
     def array_to_range(arr)
       raise(Hours::Error, "Array length mismatch") if arr.length != 2
+      raise(Hours::Error, "Array contents mismatch") if arr.map(&:class).uniq.length != 1
 
       case
-      when arr[0].is_a?(Integer)
-        arr[0]...arr[1]
+      when arr[0].is_a?(Numeric)
+        arr[0].to_i...arr[1].to_i
       when arr[0].is_a?(String)
+        raise(Hours::Error, "Array hours format error") unless arr.all? { |x| x.match(/\A\d{1,2}:\d{2}\z/) }
         bit_from_hour(arr[0])...bit_from_hour(arr[1])
       else
-        []
+        raise(Hours::Error, "Array content types error")
       end
     end
 
@@ -152,7 +154,7 @@ module BitVector
     end
 
     def time_from_minute(minute)
-      at = Time.use_zone(self.zone) { Time.current.beginning_of_day }
+      at = Time.use_zone(self.timezone) { Time.current.beginning_of_day }
 
       at + (minute * 60)
     end

@@ -170,5 +170,39 @@ RSpec.describe BitVector::Hours do
       end
     end
 
+    context "private methods" do
+      it "#array_to_range raises errors for invalid array ranges" do
+        expect { subject.send(:array_to_range, []) }.to raise_error(::BitVector::Hours::Error)
+        expect { subject.send(:array_to_range, [1]) }.to raise_error(::BitVector::Hours::Error)
+        expect { subject.send(:array_to_range, ["20:00"]) }.to raise_error(::BitVector::Hours::Error)
+
+        expect { subject.send(:array_to_range, [1, "20:00"]) }.to raise_error(::BitVector::Hours::Error)
+
+        expect { subject.send(:array_to_range, ["", "20:00"]) }.to raise_error(::BitVector::Hours::Error)
+        expect { subject.send(:array_to_range, ["2000", "20:00"]) }.to raise_error(::BitVector::Hours::Error)
+        expect { subject.send(:array_to_range, ["20:0", "20:00"]) }.to raise_error(::BitVector::Hours::Error)
+        expect { subject.send(:array_to_range, ["0:0", "20:00"]) }.to raise_error(::BitVector::Hours::Error)
+
+        expect { subject.send(:array_to_range, [nil, nil]) }.to raise_error(::BitVector::Hours::Error)
+        expect { subject.send(:array_to_range, [{}, {}]) }.to raise_error(::BitVector::Hours::Error)
+      end
+
+      it "#array_to_range returns expected ranges" do
+        expect(subject.send(:array_to_range, [1, 10])).to eq(1...10)
+        expect(subject.send(:array_to_range, [1.0, 10.0])).to eq(1...10)
+
+        expect(subject.send(:array_to_range, ["2:00", "4:00"])).to eq(24...48)
+        expect(subject.send(:array_to_range, ["20:00", "21:00"])).to eq(240...252)
+      end
+
+      it "#bit_to_time converts to time" do
+        expect(subject.send(:bit_to_time, 0).strftime('%H:%M')).to eq('00:00')
+        expect(subject.send(:bit_to_time, 1).strftime('%H:%M')).to eq('00:05')
+        expect(subject.send(:bit_to_time, 2).strftime('%H:%M')).to eq('00:10')
+
+        expect(subject.send(:bit_to_time, 287).strftime('%H:%M')).to eq('23:55')
+      end
+    end
+
   end
 end
