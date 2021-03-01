@@ -37,7 +37,7 @@ bv.ranges
 bv.hours
 #> [["00:50", "01:45"]]
 
-bv.expand 40...60
+bv.expand ["03:20", "05:00"]
 bv.ranges
 #> [10...21, 40...60]
 bv.hours
