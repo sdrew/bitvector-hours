@@ -1,0 +1,16 @@
+version: 2
+updates:
+- package-ecosystem: bundler
+  directory: "/"
+  schedule:
+    interval: weekly
+  open-pull-requests-limit: 10
+  reviewers:
+  - sdrew
+  assignees:
+  - sdrew
+  ignore:
+  - dependency-name: codecov
+    versions:
+    - 0.4.2
+    - 0.5.1
