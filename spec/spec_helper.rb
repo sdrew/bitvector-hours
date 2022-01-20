@@ -1,4 +1,5 @@
 require "bundler/setup"
+require "active_support"
 require "active_support/testing/time_helpers"
 
 if ENV['CODECOV_TOKEN'].present?
